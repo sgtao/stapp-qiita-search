@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "stapp-template"
+name = "stapp-qiita-search"
 version = "0.1.0"
-description = "streamlit project template for quick start"
+description = "Qiita記事を検索・表示するStreamlitアプリになります"
 authors = ["Shogo Ogami <sg.tao.so@gmail.com>"]
 license = "MIT License"
 readme = "README.md"
