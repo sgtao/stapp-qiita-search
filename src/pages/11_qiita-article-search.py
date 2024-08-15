@@ -2,6 +2,7 @@
 import streamlit as st
 
 from functions.api_qiita_articles import get_qiita_articles
+from components.qiita_item import qiita_item
 
 
 def main():
@@ -26,9 +27,7 @@ def main():
 
         if "latest_articles" in st.session_state:
             for article in st.session_state.latest_articles:
-                st.subheader(article["title"])
-                st.code(article["id"])
-                st.write(article["url"])
+                qiita_item(article, id=article["id"])
 
     # キーワード検索
     elif selected_menu == "キーワード検索":
@@ -64,32 +63,7 @@ def main():
         if "shown_article" in st.session_state:
             article = st.session_state.shown_article
             if article:
-                # 記事タイトルをリンクとして表示
-                st.markdown(f"### [{article['title']}]({article['url']})")
-                # 記事の基本情報を表示
-                user_name = article["user"]["name"]
-                user_id = article["user"]["id"]
-                group_info = (
-                    article["group"]["name"] if article["group"] else "なし"
-                )
-                group_id = (
-                    article["group"]["id"] if article["group"] else "なし"
-                )
-                info_text = (
-                    f"記事ID: {article['id']}, "
-                    f"作成日: {article['created_at']}, "
-                    f"最終更新日: {article['updated_at']}, "
-                    f"作成者: {user_name} (ID: {user_id} ), "
-                    f"グループ: {group_info} (ID: {group_id})"
-                )
-                st.write()
-                st.success(info_text)
-                # タグリストを作成
-                tag_list = ", ".join(tag["name"] for tag in article["tags"])
-                st.write()
-                st.info(f"タグ: {tag_list}")
-                # 記事本文を表示
-                st.write(article["body"])
+                qiita_item(article, article_body=article["body"])
 
 
 if __name__ == "__main__":
