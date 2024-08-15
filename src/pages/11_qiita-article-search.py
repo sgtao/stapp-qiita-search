@@ -32,8 +32,10 @@ def main():
     if selected_menu == "最新記事一覧":
         st.header("最新記事一覧")
         if st.button("表示・更新"):
-            latest_articles = get_qiita_articles("items")
-            for article in latest_articles:
+            st.session_state.latest_articles = get_qiita_articles("items")
+
+        if "latest_articles" in st.session_state:
+            for article in st.session_state.latest_articles:
                 st.subheader(article["title"])
                 st.code(article["id"])
                 st.write(article["url"])
@@ -43,10 +45,12 @@ def main():
         st.header("キーワード検索")
         keyword = st.text_input("キーワードを入力してください")
         if st.button("検索"):
-            search_results = get_qiita_articles(
+            st.session_state.search_results = get_qiita_articles(
                 "items", params={"query": keyword}
             )
-            for article in search_results:
+
+        if "search_results" in st.session_state:
+            for article in st.session_state.search_results:
                 st.subheader(article["title"])
                 st.code(article["id"])
                 st.write(article["url"])
@@ -56,9 +60,15 @@ def main():
         st.header("記事ID指定表示")
         item_id = st.text_input("記事IDを入力してください")
         if st.button("表示"):
-            article = get_qiita_articles(f"items/{item_id}")
+            st.session_state.shown_article = get_qiita_articles(
+                f"items/{item_id}"
+            )
+
+        if "shown_article" in st.session_state:
+            article = st.session_state.shown_article
             if article:
                 st.subheader(article["title"])
+                st.write(f"ID: {article['id']}")
                 st.write(article["url"])
                 st.write(article["body"])
 
