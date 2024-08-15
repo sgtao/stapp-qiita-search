@@ -1,4 +1,6 @@
 # pages/11_qiita-article-search.py
+from urllib.parse import urlencode
+
 import streamlit as st
 import requests
 
@@ -6,21 +8,14 @@ import requests
 BASE_URL = "https://qiita.com/api/v2"
 
 
-# 最新記事を取得する関数
-def get_latest_articles():
-    response = requests.get(f"{BASE_URL}/items")
-    return response.json()
-
-
-# キーワードで記事を検索する関数
-def search_articles_by_keyword(keyword):
-    response = requests.get(f"{BASE_URL}/items", params={"query": keyword})
-    return response.json()
-
-
-# 記事IDで記事を取得する関数
-def get_article_by_id(item_id):
-    response = requests.get(f"{BASE_URL}/items/{item_id}")
+# 共通のAPIリクエスト関数
+def get_qiita_articles(endpoint, params=None):
+    if params:
+        query_string = urlencode(params)
+        url = f"{BASE_URL}/{endpoint}?{query_string}"
+    else:
+        url = f"{BASE_URL}/{endpoint}"
+    response = requests.get(url)
     return response.json()
 
 
@@ -36,7 +31,7 @@ def main():
     # 最新記事の表示
     if selected_menu == "最新記事一覧":
         st.header("最新記事一覧")
-        latest_articles = get_latest_articles()
+        latest_articles = get_qiita_articles("items")
         for article in latest_articles:
             st.subheader(article["title"])
             st.code(article["id"])
@@ -47,7 +42,9 @@ def main():
         st.header("キーワード検索")
         keyword = st.text_input("キーワードを入力してください")
         if st.button("検索"):
-            search_results = search_articles_by_keyword(keyword)
+            search_results = get_qiita_articles(
+                "items", params={"query": keyword}
+            )
             for article in search_results:
                 st.subheader(article["title"])
                 st.code(article["id"])
@@ -58,7 +55,7 @@ def main():
         st.header("記事ID指定表示")
         item_id = st.text_input("記事IDを入力してください")
         if st.button("表示"):
-            article = get_article_by_id(item_id)
+            article = get_qiita_articles(f"items/{item_id}")
             if article:
                 st.subheader(article["title"])
                 st.write(article["url"])
