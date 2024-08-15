@@ -40,9 +40,7 @@ def main():
 
         if "search_results" in st.session_state:
             for article in st.session_state.search_results:
-                st.subheader(article["title"])
-                st.code(article["id"])
-                st.write(article["url"])
+                qiita_item(article, id=article["id"])
 
     # 記事ID指定表示
     elif selected_menu == "記事ID指定表示":
