@@ -31,11 +31,12 @@ def main():
     # 最新記事の表示
     if selected_menu == "最新記事一覧":
         st.header("最新記事一覧")
-        latest_articles = get_qiita_articles("items")
-        for article in latest_articles:
-            st.subheader(article["title"])
-            st.code(article["id"])
-            st.write(article["url"])
+        if st.button("表示・更新"):
+            latest_articles = get_qiita_articles("items")
+            for article in latest_articles:
+                st.subheader(article["title"])
+                st.code(article["id"])
+                st.write(article["url"])
 
     # キーワード検索
     elif selected_menu == "キーワード検索":
