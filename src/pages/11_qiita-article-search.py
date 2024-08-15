@@ -12,12 +12,18 @@ def main():
     with st.sidebar:
         selected_menu = st.radio(
             "メニューを選択:",
-            ["最新記事一覧", "キーワード検索", "記事ID指定表示"],
+            ["最新記事一覧", "キーワード検索"],
         )
 
     # サイドバーにメニューを配置
     st.title("Qiita Article Search App")
     # st.subheader(f"selected menu: {selected_menu}")
+    st.write(
+        "記事の閲覧は、記事IDをitem-viewerのサイドメニュに貼り付けてください"
+    )
+    st.page_link(
+        "pages/12_qiita-item-viewer.py", label="item-viewer", icon="📕"
+    )
 
     # 最新記事の表示
     if selected_menu == "最新記事一覧":
@@ -41,27 +47,6 @@ def main():
         if "search_results" in st.session_state:
             for article in st.session_state.search_results:
                 qiita_item(article, id=article["id"])
-
-    # 記事ID指定表示
-    elif selected_menu == "記事ID指定表示":
-        st.subheader("記事ID指定表示")
-        if "shown_item_id" not in st.session_state:
-            st.session_state.shown_item_id = ""
-
-        item_id = st.text_input(
-            label="記事IDを入力してください",
-            value=st.session_state.shown_item_id,
-        )
-        if item_id != st.session_state.shown_item_id:
-            st.session_state.shown_article = get_qiita_articles(
-                f"items/{item_id}"
-            )
-            st.session_state.shown_item_id = item_id
-
-        if "shown_article" in st.session_state:
-            article = st.session_state.shown_article
-            if article:
-                qiita_item(article, article_body=article["body"])
 
 
 if __name__ == "__main__":
