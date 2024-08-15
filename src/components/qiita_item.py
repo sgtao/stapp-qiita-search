@@ -7,9 +7,11 @@ def qiita_item(article, id=None, article_body=None):
     st.markdown(f"### [{article['title']}]({article['url']})")
     # id をコピーボタン付きで表示
     if id is not None:
-        st.code(article["id"])
+        col1, col2 = st.columns([1, 2])
+        col1.info("記事ID(for copy):")
+        col2.code(article["id"])
 
-    with st.expander("show item info."):
+    with st.expander("show item info.", expanded=True, icon="📌"):
         # 記事の基本情報を表示
         user_name = article["user"]["name"]
         user_id = article["user"]["id"]
@@ -25,10 +27,13 @@ def qiita_item(article, id=None, article_body=None):
         st.write()
         st.success(info_text)
         # タグリストを作成
-        tag_list = ", ".join(tag["name"] for tag in article["tags"])
+        tag_list = " ".join(tag["name"] for tag in article["tags"])
         st.write()
         st.info(f"タグ: {tag_list}")
 
     if article_body is not None:
         # 記事本文を表示
         st.write(article_body)
+
+    # 区切り線を追加
+    st.markdown("---")
