@@ -3,6 +3,7 @@ import streamlit as st
 
 from functions.api_qiita_articles import get_qiita_articles
 from components.qiita_item import qiita_item
+from components.display_remain_rate import display_remain_rate
 
 
 def main():
@@ -25,6 +26,7 @@ def main():
             value=st.session_state.shown_item_id,
             placeholder="記事IDを入力してください",
         )
+        display_remain_rate(label="表示可能数：")
 
     # サイドバーにメニューを配置
     st.title("Qiita Article Item Viewer")

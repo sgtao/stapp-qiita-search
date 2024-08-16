@@ -4,6 +4,7 @@ import streamlit as st
 from functions.api_qiita_articles import get_qiita_articles
 from components.qiita_item import qiita_item
 from components.date_filter_widget import date_filter_widget
+from components.display_remain_rate import display_remain_rate
 
 
 def main():
@@ -25,6 +26,7 @@ def main():
                 "キーワード検索（期間検索）",
             ],
         )
+        display_remain_rate(label="検索可能数：")
 
     # サイドバーにメニューを配置
     st.title("Qiita Article Search")
