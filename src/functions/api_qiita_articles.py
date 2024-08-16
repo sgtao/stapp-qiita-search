@@ -31,7 +31,11 @@ def get_qiita_articles(endpoint, params=None, page_size=20, page_num=1):
         page_uri = (
             f"{BASE_URL}/{endpoint}?page={page_num}&per_page={page_size}"
         )
-        uri = f"{page_uri}&{query_string}"
+        if query_string == "":
+            # uri = page_uri
+            uri = f"{page_uri}&query=*"
+        else:
+            uri = f"{page_uri}&{query_string}"
     else:
         uri = f"{BASE_URL}/{endpoint}"
 
@@ -43,9 +47,13 @@ def get_qiita_articles(endpoint, params=None, page_size=20, page_num=1):
         response.headers.get("Rate-Remaining", 0)
     )
 
-    # Total-Countをヘッダーから取得
-    st.session_state.num_search_items = int(
-        response.headers.get("Total-Count", 0)
-    )
+    # Total-Countをヘッダーから取得（`items`のみのendpoint時）
+    if "items" == endpoint:
+        st.session_state.num_search_items = int(
+            response.headers.get("Total-Count", 0)
+        )
+        st.session_state.formated_num_results = format(
+            st.session_state.num_search_items, ","
+        )
 
     return response.json()

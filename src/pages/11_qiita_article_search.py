@@ -5,6 +5,7 @@ from functions.api_qiita_articles import get_qiita_articles
 from components.qiita_item import qiita_item
 from components.date_filter_widget import date_filter_widget
 from components.display_remain_rate import display_remain_rate
+from components.search_results_list import search_results_list
 from components.search_pagination import search_pagination
 
 
@@ -42,6 +43,8 @@ def main():
     # 検索結果のアイテム数を初期化
     if "num_search_items" not in st.session_state:
         st.session_state.num_search_items = 0
+    if "page_num" not in st.session_state:
+        st.session_state.page_num = 1
 
     # 最新記事の表示
     if selected_menu == "最新記事一覧":
@@ -50,6 +53,11 @@ def main():
             st.session_state.latest_articles = get_qiita_articles("items")
 
         if "latest_articles" in st.session_state:
+            st.write(
+                f"最新 20件 of {st.session_state.formated_num_results} 件"
+            )
+            st.write()
+
             for article in st.session_state.latest_articles:
                 qiita_item(article, id=article["id"])
 
@@ -59,12 +67,16 @@ def main():
         keyword = st.text_input("キーワードを入力してください")
         if st.button("検索"):
             query_word = keyword
-            st.write(f"query_word: {query_word}")
             st.session_state.query_word = query_word
             st.session_state.search_results = get_qiita_articles(
                 "items", params={"query": query_word}
             )
             st.session_state.page_num = 1
+
+        # 検索結果の表示
+        search_results_list()
+        # ページネーションの表示
+        search_pagination()
 
     # キーワード検索（期間検索なし）
     elif selected_menu == "キーワード検索（期間検索）":
@@ -77,7 +89,6 @@ def main():
                 keyword + " created:>=" + start_date + " created:<=" + end_date
             )
 
-            st.write(f"query_word: {query_word}")
             st.session_state.query_word = query_word
             st.session_state.search_results = get_qiita_articles(
                 "items",
@@ -85,14 +96,9 @@ def main():
             )
             st.session_state.page_num = 1
 
-    if "search_results" in st.session_state:
-        formated_num_results = format(st.session_state.num_search_items, ",")
-        st.write(f"検索結果: {formated_num_results} 件")
-        st.write()
-        for article in st.session_state.search_results:
-            qiita_item(article, id=article["id"])
-
-    if "query_word" in st.session_state:
+        # 検索結果の表示
+        search_results_list()
+        # ページネーションの表示
         search_pagination()
 
 
