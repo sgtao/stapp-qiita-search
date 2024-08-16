@@ -53,35 +53,61 @@ def main():
         st.subheader("キーワード検索")
         keyword = st.text_input("キーワードを入力してください")
         if st.button("検索"):
-            st.write(f"query_word: {keyword}")
+            query_word = keyword
+            st.write(f"query_word: {query_word}")
+            st.session_state.query_word = query_word
             st.session_state.search_results = get_qiita_articles(
-                "items", params={"query": keyword}
+                "items", params={"query": query_word}
             )
-
-        if "search_results" in st.session_state:
-            for article in st.session_state.search_results:
-                qiita_item(article, id=article["id"])
+            st.session_state.page_num = 1
 
     # キーワード検索（期間検索なし）
     elif selected_menu == "キーワード検索（期間検索）":
         start_date, end_date = date_filter_widget()
         keyword = st.text_input("キーワードを入力してください")
         if st.button("検索"):
-            st.write(start_date)
-            st.write(end_date)
+            # st.write(start_date)
+            # st.write(end_date)
             query_word = (
-                keyword + " created:>" + start_date + " created:<" + end_date
+                keyword + " created:>=" + start_date + " created:<=" + end_date
             )
 
             st.write(f"query_word: {query_word}")
-            st.session_state.period_results = get_qiita_articles(
+            st.session_state.query_word = query_word
+            st.session_state.search_results = get_qiita_articles(
                 "items",
                 params={"query": query_word},
             )
+            st.session_state.page_num = 1
 
-        if "period_results" in st.session_state:
-            for article in st.session_state.period_results:
-                qiita_item(article, id=article["id"])
+    if "search_results" in st.session_state:
+        for article in st.session_state.search_results:
+            qiita_item(article, id=article["id"])
+
+    if "query_word" in st.session_state:
+        left, medium, right = st.columns(3)
+        col1, col2, col3 = medium.columns(3)
+
+        if st.session_state.page_num > 1:
+            # 前のページ
+            if col1.button(label="◀", help="前のページ"):
+                st.session_state.page_num = st.session_state.page_num - 1
+                st.session_state.search_results = get_qiita_articles(
+                    "items",
+                    params={"query": st.session_state.query_word},
+                    page_num=st.session_state.page_num,
+                )
+                st.rerun()
+
+        # 次のページ
+        if col3.button(label="▶", help="次のページ"):
+            st.session_state.page_num = st.session_state.page_num + 1
+            st.session_state.search_results = get_qiita_articles(
+                "items",
+                params={"query": st.session_state.query_word},
+                page_num=st.session_state.page_num,
+            )
+            st.rerun()
 
 
 if __name__ == "__main__":
