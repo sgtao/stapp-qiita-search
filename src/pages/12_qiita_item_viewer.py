@@ -28,8 +28,8 @@ def main():
         )
         display_remain_rate(label="表示可能数：")
 
-    # サイドバーにメニューを配置
-    st.title("Qiita Article Item Viewer")
+    # メイン画面
+    st.title("📕Qiita Article Item Viewer")
     # st.subheader(f"article id: {st.session_state.shown_item_id}")
     st.write(
         "記事の閲覧は、記事IDをitem-viewerのサイドメニュに貼り付けてください"

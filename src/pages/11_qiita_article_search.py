@@ -31,7 +31,7 @@ def main():
         display_remain_rate(label="検索可能数：")
 
     # メイン画面
-    st.title("Qiita Article Search")
+    st.title("🔍Qiita Article Search")
     # st.subheader(f"selected menu: {selected_menu}")
     st.write(
         "記事の閲覧は、記事IDをitem-viewerのサイドメニュに貼り付けてください"
