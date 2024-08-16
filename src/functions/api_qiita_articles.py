@@ -43,4 +43,9 @@ def get_qiita_articles(endpoint, params=None, page_size=20, page_num=1):
         response.headers.get("Rate-Remaining", 0)
     )
 
+    # Total-Countをヘッダーから取得
+    st.session_state.num_search_items = int(
+        response.headers.get("Total-Count", 0)
+    )
+
     return response.json()

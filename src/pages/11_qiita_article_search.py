@@ -5,6 +5,7 @@ from functions.api_qiita_articles import get_qiita_articles
 from components.qiita_item import qiita_item
 from components.date_filter_widget import date_filter_widget
 from components.display_remain_rate import display_remain_rate
+from components.search_pagination import search_pagination
 
 
 def main():
@@ -28,7 +29,7 @@ def main():
         )
         display_remain_rate(label="検索可能数：")
 
-    # サイドバーにメニューを配置
+    # メイン画面
     st.title("Qiita Article Search")
     # st.subheader(f"selected menu: {selected_menu}")
     st.write(
@@ -37,6 +38,10 @@ def main():
     st.page_link(
         "pages/12_qiita_item_viewer.py", label="item_viewer", icon="📕"
     )
+
+    # 検索結果のアイテム数を初期化
+    if "num_search_items" not in st.session_state:
+        st.session_state.num_search_items = 0
 
     # 最新記事の表示
     if selected_menu == "最新記事一覧":
@@ -81,33 +86,14 @@ def main():
             st.session_state.page_num = 1
 
     if "search_results" in st.session_state:
+        formated_num_results = format(st.session_state.num_search_items, ",")
+        st.write(f"検索結果: {formated_num_results} 件")
+        st.write()
         for article in st.session_state.search_results:
             qiita_item(article, id=article["id"])
 
     if "query_word" in st.session_state:
-        left, medium, right = st.columns(3)
-        col1, col2, col3 = medium.columns(3)
-
-        if st.session_state.page_num > 1:
-            # 前のページ
-            if col1.button(label="◀", help="前のページ"):
-                st.session_state.page_num = st.session_state.page_num - 1
-                st.session_state.search_results = get_qiita_articles(
-                    "items",
-                    params={"query": st.session_state.query_word},
-                    page_num=st.session_state.page_num,
-                )
-                st.rerun()
-
-        # 次のページ
-        if col3.button(label="▶", help="次のページ"):
-            st.session_state.page_num = st.session_state.page_num + 1
-            st.session_state.search_results = get_qiita_articles(
-                "items",
-                params={"query": st.session_state.query_word},
-                page_num=st.session_state.page_num,
-            )
-            st.rerun()
+        search_pagination()
 
 
 if __name__ == "__main__":
