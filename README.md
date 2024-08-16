@@ -3,7 +3,7 @@ Qiita記事を検索・表示するStreamlitアプリになります
 
 
 ## コンテンツ
-- サンプルコード（[streamlit-example](https://github.com/streamlit/streamlit-example)）を追加
+- [Demo site](https://20181028genqrcode-sktkjbgpvdfts8x8tkekbk.streamlit.app/)
 
 ## Usage
 - [poetry cli](https://cocoatomo.github.io/poetry-ja/cli/)を利用する
@@ -75,6 +75,8 @@ task test-repo
   Copyright © 2019-2024 Streamlit Inc.
 
   Streamlitは、データアプリケーションを簡単に作成するためのオープンソースライブラリです。
+
+- また、[Qiita Developper：API v2](https://qiita.com/api/v2/docs)を利用してサービスを実現しています
 
 
 ## ライセンス
