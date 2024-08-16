@@ -7,6 +7,12 @@ from components.qiita_item import qiita_item
 
 def main():
     """Streamlitアプリの構築"""
+    st.set_page_config(
+        page_title="Qiita Article Item Viewer",
+        page_icon="📕",
+        layout="wide",
+        initial_sidebar_state="expanded",
+    )
 
     # サイドバーにメニューを配置
     with st.sidebar:
@@ -23,6 +29,9 @@ def main():
     # サイドバーにメニューを配置
     st.title("Qiita Article Item Viewer")
     # st.subheader(f"article id: {st.session_state.shown_item_id}")
+    st.write(
+        "記事の閲覧は、記事IDをitem-viewerのサイドメニュに貼り付けてください"
+    )
 
     # 区切り線を追加
     st.markdown("---")
