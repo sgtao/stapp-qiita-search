@@ -8,6 +8,7 @@ from components.date_filter_widget import date_filter_widget
 from components.display_remain_rate import display_remain_rate
 from components.search_results_list import search_results_list
 from components.search_pagination import search_pagination
+from components.show_temporary_message import show_temporary_message
 
 
 def main():
@@ -61,8 +62,9 @@ def main():
             st.write(
                 f"最新 20件 of {st.session_state.formated_num_results} 件"
             )
-            st.write(f"Articles saved to: {st.session_state.temp_file_path}")
-            st.write()
+            show_temporary_message(
+                f"Articles saved to: {st.session_state.temp_file_path}"
+            )
 
             for article in st.session_state.latest_articles:
                 qiita_item(article, id=article["id"])
@@ -81,7 +83,9 @@ def main():
             st.session_state.temp_file_path = save_to_tempfile(
                 "searched", st.session_state.search_results
             )
-            st.write(f"Articles saved to: {st.session_state.temp_file_path}")
+            show_temporary_message(
+                f"Articles saved to: {st.session_state.temp_file_path}"
+            )
 
         # 検索結果の表示
         search_results_list()
@@ -108,7 +112,9 @@ def main():
             st.session_state.temp_file_path = save_to_tempfile(
                 "periodSrch", st.session_state.search_results
             )
-            st.write(f"Articles saved to: {st.session_state.temp_file_path}")
+            show_temporary_message(
+                f"Articles saved to: {st.session_state.temp_file_path}"
+            )
 
         # 検索結果の表示
         search_results_list()
