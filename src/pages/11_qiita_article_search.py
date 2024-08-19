@@ -2,6 +2,7 @@
 import streamlit as st
 
 from functions.api_qiita_articles import get_qiita_articles
+from functions.save_to_tempfile import save_to_tempfile
 from components.qiita_item import qiita_item
 from components.date_filter_widget import date_filter_widget
 from components.display_remain_rate import display_remain_rate
@@ -50,12 +51,17 @@ def main():
     if selected_menu == "最新記事一覧":
         st.subheader("最新記事一覧")
         if st.button("表示・更新"):
-            st.session_state.latest_articles = get_qiita_articles("items")
+            articles = get_qiita_articles("items")
+            st.session_state.temp_file_path = save_to_tempfile(
+                "latest", articles
+            )
+            st.session_state.latest_articles = articles
 
         if "latest_articles" in st.session_state:
             st.write(
                 f"最新 20件 of {st.session_state.formated_num_results} 件"
             )
+            st.write(f"Articles saved to: {st.session_state.temp_file_path}")
             st.write()
 
             for article in st.session_state.latest_articles:
@@ -72,6 +78,10 @@ def main():
                 "items", params={"query": query_word}
             )
             st.session_state.page_num = 1
+            st.session_state.temp_file_path = save_to_tempfile(
+                "searched", st.session_state.search_results
+            )
+            st.write(f"Articles saved to: {st.session_state.temp_file_path}")
 
         # 検索結果の表示
         search_results_list()
@@ -95,6 +105,10 @@ def main():
                 params={"query": query_word},
             )
             st.session_state.page_num = 1
+            st.session_state.temp_file_path = save_to_tempfile(
+                "periodSrch", st.session_state.search_results
+            )
+            st.write(f"Articles saved to: {st.session_state.temp_file_path}")
 
         # 検索結果の表示
         search_results_list()
