@@ -110,7 +110,7 @@ def main():
             )
             st.session_state.page_num = 1
             st.session_state.temp_file_path = save_to_tempfile(
-                "periodSrch", st.session_state.search_results
+                "searched", st.session_state.search_results
             )
             show_temporary_message(
                 f"Articles saved to: {st.session_state.temp_file_path}"
