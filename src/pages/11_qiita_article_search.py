@@ -33,6 +33,7 @@ def main():
         display_remain_rate(label="検索可能数：")
 
     # メイン画面
+    st.page_link("main.py", label="toHome", icon="🏠")
     st.title("🔍Qiita Article Search")
     # st.subheader(f"selected menu: {selected_menu}")
     st.write(

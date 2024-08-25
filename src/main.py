@@ -29,6 +29,11 @@ def main():
         label="Qiita Article Item Viewer",
         icon="📕",
     )
+    st.page_link(
+        "pages/13_searched_archive_access.py",
+        label="Searched Archive Access(show or download search-history)",
+        icon="📂",
+    )
 
 
 if __name__ == "__main__":
