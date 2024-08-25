@@ -24,8 +24,21 @@ def display_loaded_articles(file_type="item-data"):
             qiita_item(article, id=article["id"], article_body=article["body"])
         elif file_type == "list-data":
             articles = st.session_state.loaded_articles
+            article_list = []
             for article in articles:
-                qiita_item(article, id=article["id"])
+                # 記事タイトルをリンクとして表示n
+                # with st.expander(f"{article['title']}"):
+                #     st.markdown(f"[{article['title']}]({article['url']})")
+                #     qiita_item(
+                #         article,
+                #         id=article["id"], article_body=article["body"]
+                #     )
+                article_list.append({article["title"]})
+            article_selected = st.radio(
+                "記事一覧:",
+                article_list,
+            )
+            st.write(f"selected_item is {article_selected}")
         else:
             st.info("表示形式をサポートしていません")
 
