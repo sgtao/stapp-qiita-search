@@ -31,6 +31,7 @@ def main():
         display_remain_rate(label="表示可能数：")
 
     # メイン画面
+    st.page_link("main.py", label="toHome", icon="🏠")
     st.title("📕Qiita Article Item Viewer")
     # st.subheader(f"article id: {st.session_state.shown_item_id}")
     st.write(

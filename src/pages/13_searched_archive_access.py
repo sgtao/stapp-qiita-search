@@ -28,6 +28,8 @@ def main():
         layout="wide",
     )
 
+    # メイン画面
+    st.page_link("main.py", label="toHome", icon="🏠")
     st.title("📂Searched Archive Access")
     st.write("一度、検索した記事内容を再度表示します")
 
