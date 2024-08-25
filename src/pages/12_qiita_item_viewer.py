@@ -2,8 +2,10 @@
 import streamlit as st
 
 from functions.api_qiita_articles import get_qiita_articles
+from functions.save_to_tempfile import save_to_tempfile
 from components.qiita_item import qiita_item
 from components.display_remain_rate import display_remain_rate
+from components.show_temporary_message import show_temporary_message
 
 
 def main():
@@ -42,6 +44,12 @@ def main():
     if item_id != st.session_state.shown_item_id:
         st.session_state.shown_item_id = item_id
         st.session_state.shown_article = get_qiita_articles(f"items/{item_id}")
+        st.session_state.temp_file_path = save_to_tempfile(
+            "item", st.session_state.shown_article
+        )
+        show_temporary_message(
+            f"Articles saved to: {st.session_state.temp_file_path}"
+        )
 
     if "shown_article" in st.session_state:
         article = st.session_state.shown_article
