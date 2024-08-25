@@ -36,15 +36,39 @@ def main():
     selected_file_path, file_type = list_temporary_files()
     if "shown_file_path" not in st.session_state:
         st.session_state.shown_file_path = ""
+        st.session_state.action_message = ""
 
     load_btn_label = "ファイルを読み込む"
+    download_btn_label = "ダウンロードする"
     if file_type is not None:
-        if st.button(load_btn_label):
+        col1, col2 = st.columns(2)
+
+        with col1:
+            if st.button(load_btn_label):
+                with open(selected_file_path, "r") as f:
+                    articles = json.load(f)
+                    st.session_state.loaded_articles = articles
+                st.session_state.shown_file_path = selected_file_path
+                st.session_state.action_message = (
+                    f"{selected_file_path} を読み込みました"
+                )
+
+        with col2:
             with open(selected_file_path, "r") as f:
-                articles = json.load(f)
-                st.session_state.loaded_articles = articles
-            st.success(f"{selected_file_path} を読み込みました")
-            st.session_state.shown_file_path = selected_file_path
+                file_content = f.read()
+            if st.download_button(
+                label=download_btn_label,
+                data=file_content,
+                file_name=selected_file_path.split("/")[-1],
+                mime="application/json",
+            ):
+                st.session_state.shown_file_path = ""
+                st.session_state.action_message = (
+                    f"{selected_file_path} をダウンロードしました"
+                )
+
+        if st.session_state.action_message != "":
+            st.success(st.session_state.action_message)
 
     st.subheader("読み込んだ記事の表示")
     if st.session_state.shown_file_path == selected_file_path:
