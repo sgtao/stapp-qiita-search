@@ -2,7 +2,8 @@
 # pages/13_searched_archive_access.py
 import json
 import streamlit as st
-from components.qiita_item import qiita_item
+
+# from components.qiita_item import qiita_item
 
 # from components.list_temporary_files import list_temporary_files
 
@@ -18,29 +19,47 @@ def determine_file_type(uploaded_articles):
 
 def display_loaded_articles(file_type="item-data"):
     """読み込んだ記事を表示する"""
+    article_id_list = []
+    article_title_list = []
     if "loaded_articles" in st.session_state:
+        articles = st.session_state.loaded_articles
         if file_type == "item-data":
             article = st.session_state.loaded_articles
-            qiita_item(article, id=article["id"], article_body=article["body"])
+            article_id_list.append(f'{article["id"]}')
+            article_title_list.append(f'{article["title"]}')
+            # qiita_item(
+            #     article,
+            #     id=article["id"],
+            #     article_body=article["body"]
+            # )
         elif file_type == "list-data":
-            articles = st.session_state.loaded_articles
-            article_list = []
             for article in articles:
                 # 記事タイトルをリンクとして表示n
                 # with st.expander(f"{article['title']}"):
-                #     st.markdown(f"[{article['title']}]({article['url']})")
+                #     st.markdown(
+                #         f"[{article['title']}]({article['url']})"
+                #     )
                 #     qiita_item(
                 #         article,
-                #         id=article["id"], article_body=article["body"]
+                #         id=article["id"],
+                #         article_body=article["body"]
                 #     )
-                article_list.append({article["title"]})
-            article_selected = st.radio(
-                "記事一覧:",
-                article_list,
-            )
-            st.write(f"selected_item is {article_selected}")
+                # st.write(f'id : {article["id"]}')
+                # st.write(f'type of id : {type(article["id"])}')
+                # st.write(f'title : {article["title"]}')
+                # st.write(f'type of title : {type(article["title"])}')
+                article_id_list.append(f'{article["id"]}')
+                article_title_list.append(f'{article["title"]}')
         else:
             st.info("表示形式をサポートしていません")
+
+    with st.expander("記事選択"):
+        article_selected = st.radio(
+            label="記事一覧:",
+            options=article_id_list,
+            captions=article_title_list,
+        )
+    st.write(f"selected_item is {article_selected}")
 
 
 def main():
