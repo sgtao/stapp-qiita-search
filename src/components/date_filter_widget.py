@@ -17,15 +17,20 @@ def date_filter_widget():
     """
 
     # 現在の年月を取得
-    today = datetime.date.today()
-    first_day_of_month = today.replace(day=1)
+    if "start_date" in st.session_state:
+        start_date = st.session_state.start_date
+    else:
+        start_date = datetime.date.today().replace(day=1)
+
+    if "end_date" in st.session_state:
+        end_date = st.session_state.end_date
+    else:
+        end_date = datetime.date.today()
 
     # 日付入力を行う
     col_l, col_r = st.columns(2)
-    start_date = col_l.date_input("開始日", value=first_day_of_month)
-    end_date = col_r.date_input("終了日", value=today)
-    start_date_str = start_date.strftime("%Y-%m-%d")
-    end_date_str = end_date.strftime("%Y-%m-%d")
+    start_date = col_l.date_input("開始日", value=start_date)
+    end_date = col_r.date_input("終了日", value=end_date)
 
     # Expander閉じるときは使用できないの`False`を返す
-    return start_date_str, end_date_str
+    return start_date, end_date

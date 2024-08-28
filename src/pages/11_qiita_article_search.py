@@ -96,13 +96,21 @@ def main():
     # キーワード検索（期間検索なし）
     elif selected_menu == "キーワード検索（期間検索）":
         start_date, end_date = date_filter_widget()
+        start_date_str = start_date.strftime("%Y-%m-%d")
+        end_date_str = end_date.strftime("%Y-%m-%d")
         keyword = st.text_input("キーワードを入力してください")
         if st.button("検索"):
             # st.write(start_date)
             # st.write(end_date)
             query_word = (
-                keyword + " created:>=" + start_date + " created:<=" + end_date
+                keyword
+                + " created:>="
+                + start_date_str
+                + " created:<="
+                + end_date_str
             )
+            st.session_state.start_date = start_date
+            st.session_state.end_date = end_date
 
             st.session_state.query_word = query_word
             st.session_state.search_results = get_qiita_articles(
