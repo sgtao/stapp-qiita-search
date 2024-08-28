@@ -1,11 +1,7 @@
 # pages/14_uploaded_file_viewer.py
-# pages/13_searched_archive_access.py
 import json
 import streamlit as st
-
-# from components.qiita_item import qiita_item
-
-# from components.list_temporary_files import list_temporary_files
+from components.qiita_item import qiita_item
 
 
 def determine_file_type(uploaded_articles):
@@ -17,49 +13,31 @@ def determine_file_type(uploaded_articles):
     return None
 
 
-def display_loaded_articles(file_type="item-data"):
-    """読み込んだ記事を表示する"""
+def select_item_from_loaded_articles(file_type="item-data"):
+    """読み込んだ記事のID選択を表示し、選択された記事IDを返す"""
     article_id_list = []
     article_title_list = []
+    articleId_selected = ""
     if "loaded_articles" in st.session_state:
         articles = st.session_state.loaded_articles
         if file_type == "item-data":
             article = st.session_state.loaded_articles
             article_id_list.append(f'{article["id"]}')
             article_title_list.append(f'{article["title"]}')
-            # qiita_item(
-            #     article,
-            #     id=article["id"],
-            #     article_body=article["body"]
-            # )
         elif file_type == "list-data":
             for article in articles:
-                # 記事タイトルをリンクとして表示n
-                # with st.expander(f"{article['title']}"):
-                #     st.markdown(
-                #         f"[{article['title']}]({article['url']})"
-                #     )
-                #     qiita_item(
-                #         article,
-                #         id=article["id"],
-                #         article_body=article["body"]
-                #     )
-                # st.write(f'id : {article["id"]}')
-                # st.write(f'type of id : {type(article["id"])}')
-                # st.write(f'title : {article["title"]}')
-                # st.write(f'type of title : {type(article["title"])}')
                 article_id_list.append(f'{article["id"]}')
                 article_title_list.append(f'{article["title"]}')
         else:
             st.info("表示形式をサポートしていません")
 
     with st.expander("記事選択"):
-        article_selected = st.radio(
+        articleId_selected = st.radio(
             label="記事一覧:",
             options=article_id_list,
-            captions=article_title_list,
+            format_func=lambda x: article_title_list[article_id_list.index(x)],
         )
-    st.write(f"selected_item is {article_selected}")
+    return articleId_selected
 
 
 def main():
@@ -70,7 +48,6 @@ def main():
     )
 
     # メイン画面
-    st.page_link("main.py", label="toHome", icon="🏠")
     st.title("🚀Uploaded Article Viewer")
     st.write("アップロードした記事内容を表示します")
 
@@ -80,16 +57,30 @@ def main():
             uploaded_articles = json.load(uploaded_file)
             st.session_state.loaded_articles = uploaded_articles
             st.success("ファイルを読み込みました")
-            # st.json(uploaded_articles)  # JSON形式で表示
         except json.JSONDecodeError:
             st.error("アップロードファイルは有効なJSONではありません")
 
     st.subheader("アップロードした記事の表示")
     if "loaded_articles" in st.session_state:
-        # ファイルタイプを決定
         file_type = determine_file_type(st.session_state.loaded_articles)
-        # アップロードした内容を表示
-        display_loaded_articles(file_type)
+        article_id = select_item_from_loaded_articles(file_type)
+        if article_id:
+            st.write(f"選択された記事ID: {article_id}")
+            if file_type == "item-data":
+                article = st.session_state.loaded_articles
+                qiita_item(
+                    article, id=article["id"], article_body=article["body"]
+                )
+            elif file_type == "list-data":
+                articles = st.session_state.loaded_articles
+                for article in articles:
+                    if article["id"] == article_id:
+                        qiita_item(
+                            article,
+                            id=article["id"],
+                            article_body=article["body"],
+                        )
+                        break
     else:
         st.info("ファイルをアップロードしてください。")
 
