@@ -36,6 +36,7 @@ def select_item_from_loaded_articles(file_type="item-data"):
             label="記事一覧:",
             options=article_id_list,
             format_func=lambda x: article_title_list[article_id_list.index(x)],
+            captions=article_id_list,
         )
     return articleId_selected
 
