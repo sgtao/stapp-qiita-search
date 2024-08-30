@@ -2,7 +2,7 @@
 import streamlit as st
 
 
-def qiita_item(article, id=None, article_body=None):
+def qiita_item(article, id=None, article_body=None, info_open=True):
     # 記事タイトルをリンクとして表示n
     st.markdown(f"### [{article['title']}]({article['url']})")
     # id をコピーボタン付きで表示
@@ -11,7 +11,7 @@ def qiita_item(article, id=None, article_body=None):
         col1.info("記事ID(for copy):")
         col2.code(article["id"])
 
-    with st.expander("show item info.", expanded=True, icon="📌"):
+    with st.expander("show item info.", expanded=info_open, icon="📌"):
         # 記事の基本情報を表示
         user_name = article["user"]["name"]
         user_id = article["user"]["id"]

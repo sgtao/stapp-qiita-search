@@ -45,7 +45,8 @@ def display_article_tabs(article, id, article_body):
     """記事をタブで表示する"""
     tabs = st.tabs(["基本情報", "記事内容", "Markdown表示"])
     with tabs[0]:
-        st.subheader(f"タイトル: {article['title']}")
+        # st.subheader(f"タイトル: {article['title']}")
+        qiita_item(article, id)
         # st.write(json.dumps(article))
         st.code(json.dumps(article))
         # 外部サイトへのリンクを追加
@@ -57,7 +58,7 @@ def display_article_tabs(article, id, article_body):
 
     with tabs[1]:
         st.subheader("記事内容")
-        qiita_item(article, id, article_body)
+        qiita_item(article=article, article_body=article_body, info_open=False)
 
     with tabs[2]:
         st.header("Markdown表示")
