@@ -48,6 +48,12 @@ def display_article_tabs(article, id, article_body):
         st.subheader(f"タイトル: {article['title']}")
         # st.write(json.dumps(article))
         st.code(json.dumps(article))
+        # 外部サイトへのリンクを追加
+        markdown_body = """
+            JSONを見やすくする場合、
+                https://sgtao.github.io/quick-json-react/
+            などへアクセスしてみてください"""
+        st.markdown(markdown_body, unsafe_allow_html=True)
 
     with tabs[1]:
         st.subheader("記事内容")
