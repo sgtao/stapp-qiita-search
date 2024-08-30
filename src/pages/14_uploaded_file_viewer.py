@@ -41,6 +41,23 @@ def select_item_from_loaded_articles(file_type="item-data"):
     return articleId_selected
 
 
+def display_article_tabs(article, id, article_body):
+    """記事をタブで表示する"""
+    tabs = st.tabs(["基本情報", "記事内容", "Markdown表示"])
+    with tabs[0]:
+        st.subheader(f"タイトル: {article['title']}")
+        # st.write(json.dumps(article))
+        st.code(json.dumps(article))
+
+    with tabs[1]:
+        st.subheader("記事内容")
+        qiita_item(article, id, article_body)
+
+    with tabs[2]:
+        st.header("Markdown表示")
+        st.code(article_body, language="markdown")
+
+
 def main():
     st.set_page_config(
         page_title="Uploaded Article Viewer",
@@ -69,14 +86,14 @@ def main():
             st.write(f"選択された記事ID: {article_id}")
             if file_type == "item-data":
                 article = st.session_state.loaded_articles
-                qiita_item(
+                display_article_tabs(
                     article, id=article["id"], article_body=article["body"]
                 )
             elif file_type == "list-data":
                 articles = st.session_state.loaded_articles
                 for article in articles:
                     if article["id"] == article_id:
-                        qiita_item(
+                        display_article_tabs(
                             article,
                             id=article["id"],
                             article_body=article["body"],
