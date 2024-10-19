@@ -1,7 +1,8 @@
-# pages/11_qiita-article-search.py
+# 11_qiita_article_search.py
 import streamlit as st
 
-from functions.api_qiita_articles import get_qiita_articles
+# from functions.api_qiita_articles import get_qiita_articles
+from functions.QiitaItems import QiitaItems
 from functions.save_to_tempfile import save_to_tempfile
 from components.qiita_item import qiita_item
 from components.date_filter_widget import date_filter_widget
@@ -33,7 +34,7 @@ def main():
         display_remain_rate(label="検索可能数：")
 
     # メイン画面
-    st.page_link("main.py", label="toHome", icon="🏠")
+    # st.page_link("main.py", label="toHome", icon="🏠")
     st.title("🔍Qiita Article Search")
     # st.subheader(f"selected menu: {selected_menu}")
     st.write(
@@ -43,17 +44,21 @@ def main():
         "pages/12_qiita_item_viewer.py", label="item_viewer", icon="📕"
     )
 
-    # 検索結果のアイテム数を初期化
+    # 初期化
     if "num_search_items" not in st.session_state:
         st.session_state.num_search_items = 0
     if "page_num" not in st.session_state:
         st.session_state.page_num = 1
 
+    qiita_items = QiitaItems()
+
     # 最新記事の表示
     if selected_menu == "最新記事一覧":
         st.subheader("最新記事一覧")
         if st.button("表示・更新"):
-            articles = get_qiita_articles("items")
+            # articles = get_qiita_articles("items")
+            articles = qiita_items.get_articles()
+            # print(articles)
             st.session_state.temp_file_path = save_to_tempfile(
                 "latest", articles
             )
@@ -75,10 +80,12 @@ def main():
         st.subheader("キーワード検索")
         keyword = st.text_input("キーワードを入力してください")
         if st.button("検索"):
-            query_word = keyword
-            st.session_state.query_word = query_word
-            st.session_state.search_results = get_qiita_articles(
-                "items", params={"query": query_word}
+            st.session_state.query_word = keyword
+            # st.session_state.search_results = get_qiita_articles(
+            #     "items", params={"query": keyword}
+            # )
+            st.session_state.search_results = qiita_items.get_articles(
+                params={"query": keyword},
             )
             st.session_state.page_num = 1
             st.session_state.temp_file_path = save_to_tempfile(
@@ -113,8 +120,11 @@ def main():
             st.session_state.end_date = end_date
 
             st.session_state.query_word = query_word
-            st.session_state.search_results = get_qiita_articles(
-                "items",
+            # st.session_state.search_results = get_qiita_articles(
+            #     "items",
+            #     params={"query": query_word},
+            # )
+            st.session_state.search_results = qiita_items.get_articles(
                 params={"query": query_word},
             )
             st.session_state.page_num = 1
