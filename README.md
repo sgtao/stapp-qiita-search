@@ -17,7 +17,7 @@ poetry shell
 ### コマンド一覧
 ```sh
 $ task --list
-start        streamlit run src/main.py
+run          streamlit run src/main.py
 test         pytest tests
 test-cov     pytest tests --cov --cov-branch -svx
 test-repo    pytest tests --cov --cov-report=html
@@ -31,7 +31,7 @@ check-format black整形とflake8チェックを実行
 # on poetry shell
 # streamlit hello
 # streamlit run src/main.py
-task start
+task run
 # Local URL: http://localhost:8501
 ```
 

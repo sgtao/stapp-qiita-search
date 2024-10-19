@@ -24,7 +24,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.taskipy.tasks]
-start = "streamlit run src/main.py"
+run  = "streamlit run src/main.py"
 test = "pytest tests"
 test-cov = "pytest tests --cov --cov-branch -svx"
 test-repo = "pytest tests --cov --cov-report=html"
