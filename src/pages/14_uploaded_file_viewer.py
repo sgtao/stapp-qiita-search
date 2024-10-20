@@ -73,6 +73,7 @@ def main():
     )
 
     # メイン画面
+    st.page_link("main.py", label="toHome", icon="🏠")
     st.title("🚀Uploaded Article Viewer")
     st.write("アップロードした記事内容を表示します")
 
