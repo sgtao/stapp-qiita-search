@@ -1,4 +1,4 @@
-# QiitaItems.py
+# QiitaApiItems.py
 from urllib.parse import urlencode
 
 import requests
@@ -8,7 +8,7 @@ import streamlit as st
 BASE_URL = "https://qiita.com/api/v2"
 
 
-class QiitaItems:
+class QiitaApiItems:
     def __init__(self, base_url=BASE_URL):
         self.endpoint = f"{base_url}/items"
 

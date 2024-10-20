@@ -12,4 +12,4 @@ def search_results_list():
         st.write(f"検索結果: {st.session_state.formated_num_results} 件")
         st.write()
         for article in st.session_state.search_results:
-            qiita_item(article, id=article["id"])
+            qiita_item(article, id=article["id"], info_open=False)
